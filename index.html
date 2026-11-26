@@ -1,14 +1,1260 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="ja" class="scroll-smooth">
 <head>
-  <title>メンテナンス中</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラケくま工房｜バドミントンラケット修理専門店（八王子市南大沢）</title>
+    <meta name="description" content="その一本、まだ戦える。八王子市南大沢を拠点とするバドミントンラケット修理専門店「ラケくま工房」。壊れた大切なラケットを独自の方法で修復・再生します。">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: M PLUS Rounded 1c & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans JP"', 'sans-serif'],
+                        rounded: ['"M PLUS Rounded 1c"', 'sans-serif'],
+                    },
+                    colors: {
+                        court: {
+                            light: '#e8f5ee',
+                            DEFAULT: '#1b6b45',
+                            dark: '#124a30',
+                        },
+                        kuma: {
+                            cream: '#fdfbf7',
+                            beige: '#f4ede2',
+                            brown: '#6d4c3d',
+                            dark: '#4a3226',
+                            accent: '#d93848',
+                            gold: '#e69d24',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 25px -5px rgba(74, 50, 38, 0.08), 0 8px 10px -6px rgba(74, 50, 38, 0.04)',
+                        'card': '0 4px 15px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* カスタム装飾・アニメーション */
+        body {
+            background-color: #fdfbf7;
+            color: #2d2926;
+        }
+        .court-pattern {
+            background-color: #1b6b45;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .wood-sign {
+            background: linear-gradient(180deg, #f3d5a5 0%, #e5be83 100%);
+            border: 3px solid #6d4c3d;
+            box-shadow: 0 4px 0 #6d4c3d;
+        }
+        .float-anim {
+            animation: float 3.5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        /* カスタムスクロールバー */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f4ede2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b59e8c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d4c3d;
+        }
+    </style>
 </head>
-<body>
-  <h1>現在メンテナンス中です</h1>
-  <p>しばらくお待ちください。</p>
+<body class="antialiased selection:bg-kuma-accent selection:text-white">
+
+    <!-- トースト通知（コピー完了などのメッセージ表示用・alert不使用） -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-kuma-dark text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-kuma-gold/40">
+            <svg class="w-5 h-5 text-kuma-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span id="toast-message" class="text-sm font-medium">クリップボードにコピーしました</span>
+        </div>
+    </div>
+
+    <!-- 1. ヘッダー・ナビゲーション -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-kuma-beige shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <!-- ロゴエリア -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <!-- オリジナルSVGアイコン：クマ職人＆シャトル -->
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-kuma-beige border-2 border-kuma-brown flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform">
+                    <svg viewBox="0 0 64 64" class="w-9 h-9">
+                        <!-- 耳 -->
+                        <circle cx="16" cy="18" r="8" fill="#a66e46" stroke="#4a3226" stroke-width="2.5"/>
+                        <circle cx="16" cy="18" r="4" fill="#e5be83"/>
+                        <circle cx="48" cy="18" r="8" fill="#a66e46" stroke="#4a3226" stroke-width="2.5"/>
+                        <circle cx="48" cy="18" r="4" fill="#e5be83"/>
+                        <!-- 顔 -->
+                        <ellipse cx="32" cy="35" rx="21" ry="18" fill="#a66e46" stroke="#4a3226" stroke-width="2.5"/>
+                        <!-- 額のルーペ（職人アイテム） -->
+                        <circle cx="32" cy="19" r="6.5" fill="#e2e8f0" stroke="#4a3226" stroke-width="2"/>
+                        <circle cx="32" cy="19" r="3.5" fill="#ffffff"/>
+                        <!-- 口元 -->
+                        <ellipse cx="32" cy="40" rx="9" ry="7" fill="#fdfbf7"/>
+                        <ellipse cx="32" cy="37" rx="3.5" ry="2.5" fill="#4a3226"/>
+                        <path d="M28 42 Q32 45 36 42" fill="none" stroke="#4a3226" stroke-width="2" stroke-linecap="round"/>
+                        <!-- 目 -->
+                        <circle cx="23" cy="32" r="2.2" fill="#4a3226"/>
+                        <circle cx="41" cy="32" r="2.2" fill="#4a3226"/>
+                        <!-- ほっぺ -->
+                        <circle cx="19" cy="37" r="2.5" fill="#f48fb1" opacity="0.7"/>
+                        <circle cx="45" cy="37" r="2.5" fill="#f48fb1" opacity="0.7"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="block text-[10px] sm:text-xs font-bold text-court tracking-wider">バドミントンラケット修理専門店</span>
+                    <span class="font-rounded font-extrabold text-lg sm:text-xl text-kuma-dark tracking-tight">ラケくま工房</span>
+                </div>
+            </a>
+
+            <!-- PCナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-kuma-dark">
+                <a href="#recommend" class="hover:text-court transition-colors">こんな方に</a>
+                <a href="#examples" class="hover:text-court transition-colors">修理例・変化</a>
+                <a href="#pricing" class="hover:text-court transition-colors">料金・計算</a>
+                <a href="#location" class="hover:text-court transition-colors">お渡し場所</a>
+                <a href="#flow" class="hover:text-court transition-colors">ご利用の流れ</a>
+                <a href="#notes" class="hover:text-court transition-colors">注意事項</a>
+            </nav>
+
+            <!-- CTA＆ハンバーガー -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="#apply" class="bg-kuma-accent hover:bg-red-700 text-white font-rounded font-bold text-xs sm:text-sm px-3.5 sm:px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>修理を申し込む</span>
+                </a>
+                <button id="mobile-menu-btn" aria-label="メニューを開く" class="lg:hidden p-2 rounded-lg text-kuma-dark hover:bg-kuma-beige focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- モバイルドロワーメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-kuma-beige px-4 pt-2 pb-5 space-y-2 shadow-lg">
+            <a href="#recommend" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">こんな方におすすめ</a>
+            <a href="#examples" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">修理例・スペックの変化</a>
+            <a href="#pricing" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">修理代金・料金シミュレーター</a>
+            <a href="#location" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">お渡し場所・配達費</a>
+            <a href="#flow" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">修理〜お引き渡しまでの流れ</a>
+            <a href="#notes" class="mobile-link block py-2.5 px-3 rounded-lg font-bold text-kuma-dark hover:bg-kuma-beige">必ずお読みください（規約・免責）</a>
+        </div>
+    </header>
+
+    <!-- 2. ヒーローセクション -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-kuma-beige/70 via-kuma-cream to-white pt-8 pb-14 sm:pt-14 sm:pb-20 border-b border-kuma-beige">
+        <!-- 背景のバドミントンコート風ライン装飾 -->
+        <div class="absolute inset-0 pointer-events-none opacity-20">
+            <div class="max-w-5xl mx-auto h-full border-x-2 border-court"></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+            <!-- キャンペーンバッジ -->
+            <div class="flex justify-center lg:justify-start mb-5">
+                <div class="inline-flex items-center gap-2 bg-white border-2 border-kuma-accent px-4 py-1.5 rounded-full shadow-sm">
+                    <span class="bg-kuma-accent text-white text-xs font-extrabold px-2 py-0.5 rounded-full">期間限定</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-kuma-accent">2027.2.28までオープン記念キャンペーン実施中！</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+                <!-- 左カラム：コピー＆CTA -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <p class="inline-block bg-court text-white text-xs sm:text-sm font-bold px-3.5 py-1 rounded-md mb-3 tracking-wide">
+                        東京都八王子市南大沢拠点・手渡し対応で送料0円！
+                    </p>
+                    <h1 class="font-rounded font-extrabold text-3xl sm:text-4xl lg:text-5xl text-kuma-dark leading-tight mb-4">
+                        <span class="text-kuma-accent block sm:inline">壊れたラケット、</span><br class="hidden sm:inline">修理します！
+                    </h1>
+                    <p class="font-rounded font-bold text-lg sm:text-xl text-court mb-5">
+                        「その一本、まだ戦える。大切な一本、もう一度コートへ。」
+                    </p>
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed mb-8 bg-white/80 p-4 sm:p-5 rounded-2xl border border-kuma-beige shadow-sm">
+                        せっかく買った高価なラケットや思い出のあるラケットが壊れたまま自宅に眠っていませんか？<br class="hidden sm:inline">
+                        八王子市南大沢を拠点とする<strong>「ラケくま工房」</strong>では、独自の方法で可能な限り修復・強度を復元することで大切なラケットを再生します！
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start">
+                        <a href="#pricing" class="bg-court hover:bg-court-dark text-white font-rounded font-bold text-base px-7 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>料金シミュレーション・お申し込みへ</span>
+                        </a>
+                        <a href="#examples" class="bg-white hover:bg-kuma-beige text-kuma-dark border-2 border-kuma-brown/30 font-rounded font-bold text-base px-6 py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                            <span>修理例・仕上がりを見る</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右カラム：クマ職人イラスト＆看板カード -->
+                <div class="lg:col-span-5 flex flex-col items-center">
+                    <div class="relative w-full max-w-sm bg-white rounded-3xl p-6 border-2 border-kuma-brown/20 shadow-soft text-center">
+                        <!-- 木目調看板 -->
+                        <div class="wood-sign rounded-xl py-2.5 px-4 mb-4">
+                            <div class="font-rounded font-extrabold text-xl text-kuma-dark tracking-wider">ラケくま工房</div>
+                            <div class="text-[11px] font-bold text-kuma-brown">― バドミントンラケット修理専門店 ―</div>
+                        </div>
+
+                        <!-- 職人クマSVGキャラクター（ラケットとシャトル持ち） -->
+                        <div class="float-anim my-2 flex justify-center">
+                            <svg viewBox="0 0 240 210" class="w-56 h-48">
+                                <!-- 吹き出し -->
+                                <rect x="8" y="8" width="84" height="38" rx="12" fill="#fdfbf7" stroke="#6d4c3d" stroke-width="2"/>
+                                <polygon points="75,46 85,54 88,45" fill="#fdfbf7" stroke="#6d4c3d" stroke-width="2"/>
+                                <text x="50" y="24" text-anchor="middle" font-size="10" font-weight="bold" fill="#4a3226">その一本、</text>
+                                <text x="50" y="38" text-anchor="middle" font-size="10" font-weight="bold" fill="#d93848">まだ戦える。</text>
+
+                                <!-- 右手のラケット -->
+                                <g transform="translate(168, 20) rotate(12)">
+                                    <ellipse cx="22" cy="36" rx="20" ry="28" fill="#ffffff" stroke="#1b6b45" stroke-width="4"/>
+                                    <!-- ガット線 -->
+                                    <line x1="12" y1="12" x2="12" y2="60" stroke="#cbd5e1" stroke-width="1"/>
+                                    <line x1="22" y1="8" x2="22" y2="64" stroke="#cbd5e1" stroke-width="1"/>
+                                    <line x1="32" y1="12" x2="32" y2="60" stroke="#cbd5e1" stroke-width="1"/>
+                                    <line x1="4" y1="26" x2="40" y2="26" stroke="#cbd5e1" stroke-width="1"/>
+                                    <line x1="2" y1="36" x2="42" y2="36" stroke="#cbd5e1" stroke-width="1"/>
+                                    <line x1="4" y1="46" x2="40" y2="46" stroke="#cbd5e1" stroke-width="1"/>
+                                    <!-- 修理補強バンド（黒カーボン風） -->
+                                    <rect x="2" y="45" width="9" height="12" rx="2" fill="#2d2926" transform="rotate(-25 6 51)"/>
+                                    <!-- シャフト＆グリップ -->
+                                    <rect x="20" y="64" width="4" height="42" fill="#4a3226"/>
+                                    <rect x="18" y="106" width="8" height="26" rx="2" fill="#d93848"/>
+                                </g>
+
+                                <!-- クマの体（白衣＋エプロン） -->
+                                <rect x="74" y="112" width="76" height="78" rx="22" fill="#ffffff" stroke="#4a3226" stroke-width="3"/>
+                                <!-- エプロン -->
+                                <path d="M84 126 L140 126 L144 188 L80 188 Z" fill="#a66e46" stroke="#4a3226" stroke-width="2.5"/>
+                                <rect x="94" y="148" width="36" height="24" rx="4" fill="#fdfbf7" stroke="#4a3226" stroke-width="2"/>
+                                <text x="112" y="164" text-anchor="middle" font-size="9" font-weight="bold" fill="#4a3226">ラケくま</text>
+
+                                <!-- 腕 -->
+                                <ellipse cx="66" cy="138" rx="14" ry="10" fill="#a66e46" stroke="#4a3226" stroke-width="2.5" transform="rotate(-25 66 138)"/>
+                                <ellipse cx="162" cy="128" rx="15" ry="10" fill="#a66e46" stroke="#4a3226" stroke-width="2.5" transform="rotate(-35 162 128)"/>
+
+                                <!-- 左手のシャトル -->
+                                <g transform="translate(36, 118) rotate(-25)">
+                                    <polygon points="10,0 24,0 20,16 14,16" fill="#ffffff" stroke="#4a3226" stroke-width="1.8"/>
+                                    <path d="M13,16 L21,16 A4,4 0 0,1 13,16 Z" fill="#d93848" stroke="#4a3226" stroke-width="1.8"/>
+                                </g>
+
+                                <!-- クマの頭 -->
+                                <circle cx="82" cy="58" r="13" fill="#a66e46" stroke="#4a3226" stroke-width="3"/>
+                                <circle cx="82" cy="58" r="6" fill="#e5be83"/>
+                                <circle cx="142" cy="58" r="13" fill="#a66e46" stroke="#4a3226" stroke-width="3"/>
+                                <circle cx="142" cy="58" r="6" fill="#e5be83"/>
+                                <ellipse cx="112" cy="85" rx="36" ry="30" fill="#a66e46" stroke="#4a3226" stroke-width="3"/>
+                                
+                                <!-- 額の拡大鏡バンド -->
+                                <path d="M78 72 Q112 64 146 72" fill="none" stroke="#4a3226" stroke-width="4"/>
+                                <circle cx="112" cy="62" r="11" fill="#e2e8f0" stroke="#4a3226" stroke-width="2.5"/>
+                                <circle cx="112" cy="62" r="6" fill="#ffffff"/>
+
+                                <!-- 顔パーツ -->
+                                <ellipse cx="112" cy="94" rx="15" ry="11" fill="#fdfbf7"/>
+                                <ellipse cx="112" cy="89" rx="5" ry="3.5" fill="#4a3226"/>
+                                <path d="M105 97 Q112 103 119 97" fill="none" stroke="#4a3226" stroke-width="2.5" stroke-linecap="round"/>
+                                <circle cx="96" cy="82" r="3.2" fill="#4a3226"/>
+                                <circle cx="128" cy="82" r="3.2" fill="#4a3226"/>
+                                <circle cx="90" cy="90" r="4" fill="#f48fb1" opacity="0.65"/>
+                                <circle cx="134" cy="90" r="4" fill="#f48fb1" opacity="0.65"/>
+                            </svg>
+                        </div>
+
+                        <!-- 4つのステップバッジ -->
+                        <div class="grid grid-cols-4 gap-1.5 pt-2 border-t border-kuma-beige text-[11px] font-bold text-kuma-dark">
+                            <div class="bg-kuma-beige/70 rounded-lg py-1.5">1. 診る</div>
+                            <div class="bg-kuma-beige/70 rounded-lg py-1.5">2. 直す</div>
+                            <div class="bg-kuma-beige/70 rounded-lg py-1.5">3. よみがえる</div>
+                            <div class="bg-kuma-beige/70 rounded-lg py-1.5">4. ずっと一緒に</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. こんな方におすすめ！セクション -->
+    <section id="recommend" class="py-14 sm:py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-court uppercase bg-court-light px-3 py-1 rounded-full">RECOMMEND</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    こんな方におすすめ！
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">一つでも当てはまる方は、ぜひラケくま工房にご相談ください。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <!-- カード1 -->
+                <div class="bg-kuma-cream border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-card hover:border-court/40 transition-colors">
+                    <div class="w-11 h-11 rounded-xl bg-court text-white flex items-center justify-center shrink-0 font-rounded font-extrabold text-lg">
+                        ✓
+                    </div>
+                    <div>
+                        <h3 class="font-rounded font-bold text-base sm:text-lg text-kuma-dark mb-1">
+                            練習用のサブラケットを何本か持っておきたい方
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            公式戦用では使えないけど、普段の練習やノック用（特にガットの消耗が激しい冬場）に使えるラケットを確保したい方に最適です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- カード2 -->
+                <div class="bg-kuma-cream border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-card hover:border-court/40 transition-colors">
+                    <div class="w-11 h-11 rounded-xl bg-court text-white flex items-center justify-center shrink-0 font-rounded font-extrabold text-lg">
+                        ✓
+                    </div>
+                    <div>
+                        <h3 class="font-rounded font-bold text-base sm:text-lg text-kuma-dark mb-1">
+                            ネット修理業者の「往復送料」が高くて迷っている方
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            遠方の業者に送るとラケット専用の梱包資材や往復送料だけで数千円かかってしまいます。南大沢駅周辺での手渡しなら<strong>配達費0円</strong>です！
+                        </p>
+                    </div>
+                </div>
+
+                <!-- カード3 -->
+                <div class="bg-kuma-cream border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-card hover:border-court/40 transition-colors">
+                    <div class="w-11 h-11 rounded-xl bg-court text-white flex items-center justify-center shrink-0 font-rounded font-extrabold text-lg">
+                        ✓
+                    </div>
+                    <div>
+                        <h3 class="font-rounded font-bold text-base sm:text-lg text-kuma-dark mb-1">
+                            高額な新品ラケットは怖くてしばらく買えない…
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            近年のラケット価格高騰で、1本3万円近くするモデルも珍しくありません。数千円の修理で今の手持ちラケットを復活させませんか？
+                        </p>
+                    </div>
+                </div>
+
+                <!-- カード4 -->
+                <div class="bg-kuma-cream border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-card hover:border-court/40 transition-colors">
+                    <div class="w-11 h-11 rounded-xl bg-court text-white flex items-center justify-center shrink-0 font-rounded font-extrabold text-lg">
+                        ✓
+                    </div>
+                    <div>
+                        <h3 class="font-rounded font-bold text-base sm:text-lg text-kuma-dark mb-1">
+                            過去に激戦をともに戦ったラケットを成仏させたくない！
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            大会の思い出が詰まった一本や、すでに廃盤になって手に入らないお気に入りのモデルを、もう一度コートで振れる状態へ蘇らせます。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 修理例と修理による変化（スペック影響の明示） -->
+    <section id="examples" class="py-14 sm:py-20 bg-kuma-beige/50 border-y border-kuma-beige">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-court uppercase bg-white px-3 py-1 rounded-full border border-court/20">REPAIR EXAMPLES</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    実際の修理例と仕上がりイメージ
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">破損箇所に独自のカーボン補強を施し、ガット張りに耐えうる強度を復元します。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-10">
+                <!-- 修理例1 -->
+                <div class="bg-white rounded-3xl p-6 shadow-card border border-kuma-beige">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <span class="bg-court text-white text-xs font-bold px-3 py-1 rounded-full">修理例 1</span>
+                        <span class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark">アストロクス100TOUR</span>
+                    </div>
+
+                    <!-- Before / After ビジュアル図解 -->
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <!-- 施工前 -->
+                        <div class="bg-red-50/70 border border-red-200 rounded-2xl p-3.5 text-center flex flex-col justify-between">
+                            <span class="text-xs font-extrabold text-kuma-accent mb-2">＜施工前＞</span>
+                            <div class="my-2 flex justify-center">
+                                <!-- 破損フレーム図解SVG -->
+                                <svg viewBox="0 0 140 80" class="w-32 h-20">
+                                    <path d="M10 65 L130 15" stroke="#be123c" stroke-width="14" stroke-linecap="round"/>
+                                    <path d="M10 65 L130 15" stroke="#ffffff" stroke-width="3" stroke-dasharray="8 10"/>
+                                    <!-- ヒビ表現 -->
+                                    <polyline points="62,32 70,42 66,48 76,54" fill="none" stroke="#1e293b" stroke-width="3" stroke-linejoin="round"/>
+                                    <circle cx="42" cy="51" r="3" fill="#1e293b"/>
+                                    <circle cx="96" cy="29" r="3" fill="#1e293b"/>
+                                </svg>
+                            </div>
+                            <p class="text-xs text-gray-700 font-medium leading-snug">
+                                パートナーとのダブルス中、ラケットが接触！<span class="text-kuma-accent font-bold">7時方向に斜めのヒビ</span>
+                            </p>
+                        </div>
+
+                        <!-- 施工後 -->
+                        <div class="bg-court-light/60 border border-court/30 rounded-2xl p-3.5 text-center flex flex-col justify-between">
+                            <span class="text-xs font-extrabold text-court mb-2">＜施工後＞</span>
+                            <div class="my-2 flex justify-center">
+                                <!-- 修復フレーム図解SVG -->
+                                <svg viewBox="0 0 140 80" class="w-32 h-20">
+                                    <path d="M10 65 L130 15" stroke="#be123c" stroke-width="14" stroke-linecap="round"/>
+                                    <!-- カーボン補強ラップ -->
+                                    <rect x="44" y="29" width="52" height="20" rx="4" fill="#1e293b" transform="rotate(-22.6 70 39)"/>
+                                    <line x1="52" y1="36" x2="88" y2="21" stroke="#475569" stroke-width="1.5" stroke-dasharray="3 3"/>
+                                    <line x1="56" y1="45" x2="92" y2="30" stroke="#475569" stroke-width="1.5" stroke-dasharray="3 3"/>
+                                </svg>
+                            </div>
+                            <p class="text-xs text-gray-700 font-medium leading-snug">
+                                ヒビ周辺を特殊補強材で巻き込み硬化。<span class="text-court font-bold">ガット張りも問題なし！</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 修理例2 -->
+                <div class="bg-white rounded-3xl p-6 shadow-card border border-kuma-beige">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <span class="bg-court text-white text-xs font-bold px-3 py-1 rounded-full">修理例 2</span>
+                        <span class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark">ナノフレア1000z</span>
+                    </div>
+
+                    <!-- Before / After ビジュアル図解 -->
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <!-- 施工前 -->
+                        <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-3.5 text-center flex flex-col justify-between">
+                            <span class="text-xs font-extrabold text-amber-800 mb-2">＜施工前＞</span>
+                            <div class="my-2 flex justify-center">
+                                <!-- トップ部微細ヒビ図解SVG -->
+                                <svg viewBox="0 0 140 80" class="w-32 h-20">
+                                    <path d="M10 42 Q70 34 130 42" fill="none" stroke="#eab308" stroke-width="14" stroke-linecap="round"/>
+                                    <!-- 微細なヒビ -->
+                                    <polyline points="68,31 72,39 69,45" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                                    <circle cx="70" cy="38" r="14" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+                                </svg>
+                            </div>
+                            <p class="text-xs text-gray-700 font-medium leading-snug">
+                                ハイテンションでの張り上げにより、練習中に<span class="text-kuma-accent font-bold">トップ部分に僅かなヒビ</span>発生！
+                            </p>
+                        </div>
+
+                        <!-- 施工後 -->
+                        <div class="bg-court-light/60 border border-court/30 rounded-2xl p-3.5 text-center flex flex-col justify-between">
+                            <span class="text-xs font-extrabold text-court mb-2">＜施工後＞</span>
+                            <div class="my-2 flex justify-center">
+                                <!-- トップ部修復図解SVG -->
+                                <svg viewBox="0 0 140 80" class="w-32 h-20">
+                                    <path d="M10 42 Q70 34 130 42" fill="none" stroke="#eab308" stroke-width="14" stroke-linecap="round"/>
+                                    <!-- ガット -->
+                                    <line x1="45" y1="44" x2="45" y2="75" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <line x1="70" y1="42" x2="70" y2="75" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <line x1="95" y1="44" x2="95" y2="75" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <!-- 補強部 -->
+                                    <rect x="40" y="28" width="60" height="20" rx="4" fill="#1e293b"/>
+                                    <circle cx="45" cy="46" r="2" fill="#94a3b8"/>
+                                    <circle cx="70" cy="46" r="2" fill="#94a3b8"/>
+                                    <circle cx="95" cy="46" r="2" fill="#94a3b8"/>
+                                </svg>
+                            </div>
+                            <p class="text-xs text-gray-700 font-medium leading-snug">
+                                単品グロメット処理＆補強材で強度を復元。<span class="text-court font-bold">再び練習用として現役復帰！</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 【重要】修理による変化（スペックへの影響） -->
+            <div class="bg-white border-2 border-kuma-gold rounded-2xl p-5 sm:p-7 shadow-sm">
+                <div class="flex items-center gap-2.5 mb-3">
+                    <span class="bg-kuma-gold text-white text-xs font-extrabold px-2.5 py-1 rounded-md">重要</span>
+                    <h3 class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark">
+                        修理に伴うラケットの変化について（必ずご確認ください）
+                    </h3>
+                </div>
+                <ul class="space-y-2.5 text-sm sm:text-base text-gray-700">
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-gold font-bold mt-0.5">◆</span>
+                        <span><strong>重量の増加：</strong>1か所の修理につき、全体の重量が<strong>約2.5g〜3g増加</strong>します。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-gold font-bold mt-0.5">◆</span>
+                        <span><strong>バランス・太さの変化：</strong>重量バランス（中心点）は<strong>5〜10mmほどヘッドヘビー側</strong>になります。また、補強材を巻くため<strong>フレームが約1mm厚く</strong>なります。</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 修理代金・料金シミュレーター -->
+    <section id="pricing" class="py-14 sm:py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-kuma-accent uppercase bg-red-50 px-3 py-1 rounded-full border border-red-200">PRICING & SIMULATOR</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    修理代金・かんたん料金シミュレーター
+                </h2>
+                <div class="mt-3 inline-block bg-kuma-accent text-white font-rounded font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-sm">
+                    🎉 2027.2.28までオープン記念キャンペーン実施中！
+                </div>
+            </div>
+
+            <!-- 料金表カード -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+                <!-- 基本修理代 -->
+                <div class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 relative overflow-hidden">
+                    <div class="bg-kuma-accent text-white text-xs font-extrabold px-3 py-1 rounded-bl-xl absolute top-0 right-0">
+                        500円OFF！
+                    </div>
+                    <h3 class="font-rounded font-extrabold text-lg text-kuma-dark mb-2">基本修理代（1か所目）</h3>
+                    <div class="flex items-baseline gap-2 my-3">
+                        <span class="text-xs font-bold text-kuma-accent bg-red-100 px-2 py-0.5 rounded">キャンペーン価格</span>
+                        <span class="font-rounded font-extrabold text-3xl sm:text-4xl text-kuma-accent">3,500<span class="text-lg">円</span></span>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">（通常予定価格 5,500円）</p>
+                    <div class="bg-white rounded-xl p-3 border border-kuma-beige text-sm text-gray-700">
+                        ※ 同じラケットで破損箇所が複数ある場合、<strong>1か所追加につき ＋1,000円</strong> で修理可能です。
+                    </div>
+                </div>
+
+                <!-- ガット張り上げ -->
+                <div class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 relative overflow-hidden">
+                    <div class="bg-kuma-accent text-white text-xs font-extrabold px-3 py-1 rounded-bl-xl absolute top-0 right-0">
+                        500円OFF！
+                    </div>
+                    <h3 class="font-rounded font-extrabold text-lg text-kuma-dark mb-2">ガット張り上げ（ガット代＋工賃）</h3>
+                    <div class="flex items-baseline gap-2 my-3">
+                        <span class="text-xs font-bold text-kuma-accent bg-red-100 px-2 py-0.5 rounded">キャンペーン価格</span>
+                        <span class="font-rounded font-extrabold text-3xl sm:text-4xl text-kuma-accent">2,000<span class="text-lg">円</span></span>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">（通常予定価格 2,500円）</p>
+                    <div class="bg-white rounded-xl p-3 border border-kuma-beige text-sm text-gray-700">
+                        ※ 使用ガットは<strong>ヨネックス「エクスボルト65（白）」</strong>となります。<br>
+                        <span class="text-xs text-gray-500">例：修理1か所＋ガット張り上げで合計 <strong>5,500円</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インタラクティブ料金シミュレーター -->
+            <div class="bg-court-light/50 border-2 border-court rounded-3xl p-6 sm:p-8 shadow-soft">
+                <div class="flex items-center gap-2.5 mb-6">
+                    <div class="w-9 h-9 rounded-full bg-court text-white flex items-center justify-center font-bold">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-rounded font-extrabold text-lg sm:text-xl text-kuma-dark">リアルタイム料金</h3>
+                        <p class="text-xs text-gray-600">条件を選ぶと、合計金額が自動計算されます</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <!-- 選択コントロール -->
+                    <div class="lg:col-span-7 space-y-5">
+                        <!-- 1. 破損箇所数 -->
+                        <div class="bg-white p-4 rounded-2xl border border-court/20">
+                            <label class="block text-sm font-bold text-kuma-dark mb-2">
+                                1. 破損箇所の数（1か所目 3,500円 / 追加1か所につき +1,000円）
+                            </label>
+                            <div class="grid grid-cols-5 gap-2" id="sim-cracks-group">
+                                <button type="button" data-val="1" class="sim-crack-btn py-2.5 rounded-xl font-rounded font-bold text-sm border-2 border-court bg-court text-white transition-all">1か所</button>
+                                <button type="button" data-val="2" class="sim-crack-btn py-2.5 rounded-xl font-rounded font-bold text-sm border-2 border-gray-200 bg-white text-gray-700 hover:border-court/50 transition-all">2か所</button>
+                                <button type="button" data-val="3" class="sim-crack-btn py-2.5 rounded-xl font-rounded font-bold text-sm border-2 border-gray-200 bg-white text-gray-700 hover:border-court/50 transition-all">3か所</button>
+                                <button type="button" data-val="4" class="sim-crack-btn py-2.5 rounded-xl font-rounded font-bold text-sm border-2 border-gray-200 bg-white text-gray-700 hover:border-court/50 transition-all">4か所</button>
+                                <button type="button" data-val="5" class="sim-crack-btn py-2.5 rounded-xl font-rounded font-bold text-sm border-2 border-gray-200 bg-white text-gray-700 hover:border-court/50 transition-all">5か所</button>
+                            </div>
+                        </div>
+
+                        <!-- 2. ガット張り上げ -->
+                        <div class="bg-white p-4 rounded-2xl border border-court/20">
+                            <label class="block text-sm font-bold text-kuma-dark mb-2">
+                                2. ガット張り上げ（エクスボルト65・白 / +2,000円）
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" id="sim-gut-yes" class="py-2.5 px-3 rounded-xl font-rounded font-bold text-sm border-2 border-court bg-court text-white transition-all">
+                                    張り上げあり（+2,500円）
+                                </button>
+                                <button type="button" id="sim-gut-no" class="py-2.5 px-3 rounded-xl font-rounded font-bold text-sm border-2 border-gray-200 bg-white text-gray-700 hover:border-court/50 transition-all">
+                                    修理のみ（0円）
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. お渡し・配達方法 -->
+                        <div class="bg-white p-4 rounded-2xl border border-court/20">
+                            <label class="block text-sm font-bold text-kuma-dark mb-2">
+                                3. 受け渡し・引き渡し方法
+                            </label>
+                            <select id="sim-delivery" class="w-full p-3 rounded-xl border-2 border-gray-200 text-sm font-bold text-kuma-dark focus:border-court focus:outline-none bg-white">
+                                <option value="0">①② 南大沢駅改札外 または 周辺指定場所（往復 0円）</option>
+                                <option value="800">③ サークル練習会場へ配達（片道のみ・1回 800円）</option>
+                                <option value="1600">③ サークル練習会場へ配達（受け渡し＋引き渡し往復 1,600円）</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 計算結果表示パネル -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white rounded-2xl p-6 border-2 border-court shadow-md">
+                            <div class="text-xs font-bold text-gray-500 mb-1">お見積り合計（キャンペーン適用）</div>
+                            <div class="flex items-baseline gap-1 pb-4 mb-4 border-b border-gray-100">
+                                <span id="sim-total-price" class="font-rounded font-extrabold text-4xl sm:text-5xl text-kuma-accent">4,000</span>
+                                <span class="font-bold text-lg text-kuma-dark">円（税込）</span>
+                            </div>
+
+                            <!-- 内訳 -->
+                            <div class="space-y-2 text-xs sm:text-sm text-gray-600 mb-5">
+                                <div class="flex justify-between">
+                                    <span>基本修理代（<span id="sim-breakdown-cracks">1</span>か所）</span>
+                                    <span class="font-bold text-kuma-dark"><span id="sim-repair-cost">3,500</span>円</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>ガット張り上げ</span>
+                                    <span class="font-bold text-kuma-dark"><span id="sim-gut-cost">2,500</span>円</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>配達費</span>
+                                    <span class="font-bold text-kuma-dark"><span id="sim-delivery-cost">0</span>円</span>
+                                </div>
+                            </div>
+
+                            <!-- 重量増加の目安 -->
+                            <div class="bg-kuma-beige/80 rounded-xl p-3.5 mb-5">
+                                <div class="text-xs font-bold text-kuma-brown mb-1">⚖️ 修理による重量増加の目安</div>
+                                <div class="font-rounded font-extrabold text-base text-kuma-dark">
+                                    約 ＋<span id="sim-weight-min">2.5</span>g 〜 <span id="sim-weight-max">3.0</span>g
+                                </div>
+                                <div class="text-[11px] text-gray-600 mt-0.5">※1か所あたり約2.5〜3g増・ヘッドヘビー寄りになります</div>
+                            </div>
+
+                            <button type="button" id="apply-from-sim" class="w-full bg-kuma-accent hover:bg-red-700 text-white font-rounded font-bold py-3.5 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                                <span>この内容で申し込みフォームへ反映</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. お渡し場所・配達費 -->
+    <section id="location" class="py-14 sm:py-20 bg-kuma-cream border-t border-kuma-beige">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-court uppercase bg-court-light px-3 py-1 rounded-full">HANDOVER & DELIVERY</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    お渡し場所・配達費
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">下記①〜③からご都合の良い方法をお選びください。</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- ① 南大沢駅 -->
+                <div class="bg-white border-2 border-court rounded-2xl p-5 sm:p-6 shadow-card relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <span class="w-8 h-8 rounded-full bg-court text-white font-rounded font-extrabold flex items-center justify-center shrink-0 mt-0.5">①</span>
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3 class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark">
+                                    京王線「南大沢」駅 改札外 切符売り場前
+                                </h3>
+                                <span class="bg-kuma-accent text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">おすすめ！</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-600">お仕事帰りや学校帰りにも立ち寄りやすい駅前でのお渡しです。</p>
+                        </div>
+                    </div>
+                    <div class="sm:text-right pl-11 sm:pl-0 shrink-0">
+                        <span class="text-xs text-gray-500 block">配達費</span>
+                        <span class="font-rounded font-extrabold text-2xl sm:text-3xl text-court">0<span class="text-base">円</span></span>
+                    </div>
+                </div>
+
+                <!-- ② 南大沢周辺 -->
+                <div class="bg-white border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <span class="w-8 h-8 rounded-full bg-kuma-brown text-white font-rounded font-extrabold flex items-center justify-center shrink-0 mt-0.5">②</span>
+                        <div>
+                            <h3 class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark mb-1">
+                                その他、八王子市南大沢周辺の指定場所
+                            </h3>
+                            <p class="text-xs sm:text-sm text-gray-600">お車でお越しの方など、南大沢周辺のわかりやすい場所をご相談の上決定します（詳細はメールにてご案内いたします）。</p>
+                        </div>
+                    </div>
+                    <div class="sm:text-right pl-11 sm:pl-0 shrink-0">
+                        <span class="text-xs text-gray-500 block">配達費</span>
+                        <span class="font-rounded font-extrabold text-2xl sm:text-3xl text-court">0<span class="text-base">円</span></span>
+                    </div>
+                </div>
+
+                <!-- ③ 練習会場への配達 -->
+                <div class="bg-white border-2 border-kuma-beige rounded-2xl p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <span class="w-8 h-8 rounded-full bg-kuma-brown text-white font-rounded font-extrabold flex items-center justify-center shrink-0 mt-0.5">③</span>
+                        <div>
+                            <h3 class="font-rounded font-extrabold text-base sm:text-lg text-kuma-dark mb-1">
+                                多摩地区・近隣市町村の体育館、小学校など貴方のサークル練習会場への配達
+                            </h3>
+                            <p class="text-xs sm:text-sm text-gray-600">
+                                対応エリア例：八王子、町田、多摩、稲城、立川、福生、府中、調布、相模原など
+                            </p>
+                        </div>
+                    </div>
+                    <div class="sm:text-right pl-11 sm:pl-0 shrink-0">
+                        <span class="text-xs text-gray-500 block">受け渡し・引き渡し1回につき</span>
+                        <span class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark">各800<span class="text-base">円</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 修理〜お引き渡しまでの流れ -->
+    <section id="flow" class="py-14 sm:py-20 bg-white border-t border-kuma-beige">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-court uppercase bg-court-light px-3 py-1 rounded-full">FLOW</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    修理〜お引き渡しまでの流れ
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">ご入金確認後、通常1〜2週間程度で修理完了いたします。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+                <!-- STEP 1 -->
+                <div class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 flex flex-col justify-between shadow-card">
+                    <div>
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <span class="bg-court text-white font-rounded font-extrabold text-xs px-3 py-1 rounded-full">STEP 1</span>
+                            <h3 class="font-rounded font-extrabold text-xl text-kuma-dark">受け付け</h3>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">
+                            まずは下記メール宛て（または下部の<a href="#apply" class="text-court underline font-bold">申し込み作成フォーム</a>）に以下5点をお送りください。
+                        </p>
+                        <ol class="bg-white rounded-xl p-3.5 border border-kuma-beige text-xs sm:text-sm space-y-1.5 font-medium text-kuma-dark mb-4">
+                            <li><strong>1.</strong> お名前（ニックネームも可）</li>
+                            <li><strong>2.</strong> 連絡先（携帯番号）</li>
+                            <li><strong>3.</strong> 破損箇所数（例：1か所 など）</li>
+                            <li><strong>4.</strong> 「修理のみ」or「修理＋ガット張り〇ポンド」</li>
+                            <li><strong>5.</strong> 破損箇所の写真（なくても可）</li>
+                        </ol>
+                    </div>
+                    <div class="bg-kuma-beige/70 rounded-xl p-3 text-xs text-gray-700">
+                        <p class="font-bold text-kuma-dark mb-1">📩 badive2001@yahoo.co.jp</p>
+                        <p>※送信後48時間たっても返信がない場合は、お手数ですが携帯（<a href="tel:09097870014" class="underline font-bold">090-9787-0014</a>）へお電話ください。</p>
+                    </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 flex flex-col justify-between shadow-card">
+                    <div>
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <span class="bg-court text-white font-rounded font-extrabold text-xs px-3 py-1 rounded-full">STEP 2</span>
+                            <h3 class="font-rounded font-extrabold text-xl text-kuma-dark">受け渡し・お支払い</h3>
+                        </div>
+                        <ul class="space-y-2.5 text-sm text-gray-700">
+                            <li class="flex items-start gap-2">
+                                <span class="text-court font-bold">●</span>
+                                <span>当方より修理<strong>「可否」のメール</strong>を返信いたします。</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-court font-bold">●</span>
+                                <span>「可」の場合、受け渡し方法と日時をご提案しますので、前記「お渡し場所」①〜③よりお選びください。</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-court font-bold">●</span>
+                                <span>代金をお伝えしますので、ラケット受け渡し時に<strong>「現金」</strong>または<strong>「2日以内に銀行振り込み（みずほ銀行、三菱UFJ銀行）」</strong>にてお支払い願います。</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-court font-bold">●</span>
+                                <span>入金完了を確認しだい作業に取り掛かります。</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 bg-white rounded-xl p-3 border border-kuma-beige text-xs text-gray-600">
+                        ※フレーム全体が歪んだもの、完全欠損したものなど、修理不可と判断させていただく場合もございます。
+                    </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 flex flex-col justify-between shadow-card">
+                    <div>
+                        <div class="flex items-center gap-2.5 mb-4">
+                            <span class="bg-court text-white font-rounded font-extrabold text-xs px-3 py-1 rounded-full">STEP 3</span>
+                            <h3 class="font-rounded font-extrabold text-xl text-kuma-dark">完了連絡・引き渡し</h3>
+                        </div>
+                        <div class="inline-block bg-court-light text-court font-bold text-xs px-3 py-1 rounded-full mb-3">
+                            ⏱ 作業開始から約1〜2週間
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">
+                            修理完了の連絡をメールにていたしますので、引き渡し場所をお選びください。
+                        </p>
+                        <div class="bg-white rounded-xl p-3.5 border border-kuma-beige text-xs sm:text-sm space-y-1 font-bold text-kuma-dark mb-4">
+                            <div>◇ 最初の受け渡し場所</div>
+                            <div>◇ 前記「お渡し場所」①〜③</div>
+                        </div>
+                        <p class="text-xs text-gray-600">
+                            ※当方からメール送信後48時間たっても返信がない場合は、貴方様の携帯へお電話いたしますのでご了承ください。
+                        </p>
+                    </div>
+                    <div class="mt-4 text-center py-2.5 bg-court text-white font-rounded font-extrabold rounded-xl text-sm">
+                        ありがとうございました！🏸
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. 必ずお読みください（リーガルチェック反映済みの規約・免責事項） -->
+    <section id="notes" class="py-14 sm:py-20 bg-kuma-beige/60 border-t border-kuma-beige">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 border-2 border-kuma-brown/30 shadow-card">
+                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+                    <div class="w-10 h-10 rounded-full bg-kuma-brown text-white flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="font-rounded font-extrabold text-xl sm:text-2xl text-kuma-dark">お読みください（ご利用規約・免責事項）</h2>
+                        <p class="text-xs text-gray-500">トラブル防止のため、お申し込み前に必ず内容をご確認ください。</p>
+                    </div>
+                </div>
+
+                <ul class="space-y-3.5 text-sm sm:text-base text-gray-700 leading-relaxed">
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>あくまでも破損箇所の修理のみに特化したサービスですので、<strong>新品同様の性能・強度を保証するものではありません</strong>。また重量が1か所につき2.5〜3g程度増えることやヘッドヘビーになること、フレームが1mm程度厚くなることをご理解のうえお申し込みください。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>修理後のご使用による再破損や、作業中に経年劣化・見えないヒビ等が原因で破損した場合の責任は負いかねます（<strong>作業中に破損した場合は代金を全額返金いたします</strong>）。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>お預かり後にご申告以外の破損箇所が見つかった場合はメールにて連絡いたしますので、追加料金・修理内容をご確認のうえ修理の続行をご判断ください。修理前であれば返金対応いたします。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>連続グロメット部分の破損の場合、単品グロメットに交換させていただきます。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>修理を目的としたサービスですので、正常なラケット単体へのガット張りは受け付けていません。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span>完了のご連絡から<strong>3ヶ月を経過してもお引き取りいただけない場合</strong>、当方にて処分させていただく場合がございます。</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="text-kuma-brown font-bold">・</span>
+                        <span><strong>未成年の方</strong>は保護者の同意を得た上でお申し込みください。</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. かんたん申し込みメール作成フォーム -->
+    <section id="apply" class="py-14 sm:py-20 bg-white border-t border-kuma-beige">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10">
+                <span class="text-xs font-extrabold tracking-widest text-white uppercase bg-kuma-accent px-3 py-1 rounded-full">CONTACT & APPLY</span>
+                <h2 class="font-rounded font-extrabold text-2xl sm:text-3xl text-kuma-dark mt-3">
+                    かんたん修理申し込みメール作成
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">
+                    必要事項を入力すると、そのままメールアプリを起動して送信できます。<br class="hidden sm:inline">
+                    破損箇所のお写真がある場合は、メール起動後に写真を添付してお送りください。
+                </p>
+            </div>
+
+            <form id="apply-form" class="bg-kuma-cream border-2 border-kuma-brown/20 rounded-3xl p-6 sm:p-8 shadow-soft space-y-5">
+                <!-- お名前 -->
+                <div>
+                    <label for="form-name" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                        1. お名前（ニックネームも可） <span class="bg-kuma-accent text-white text-[10px] px-2 py-0.5 rounded ml-1">必須</span>
+                    </label>
+                    <input type="text" id="form-name" required placeholder="例：南大沢 太郎 / ラケくま" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:border-court focus:outline-none">
+                </div>
+
+                <!-- 携帯電話番号 -->
+                <div>
+                    <label for="form-phone" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                        2. ご連絡先（携帯電話番号） <span class="bg-kuma-accent text-white text-[10px] px-2 py-0.5 rounded ml-1">必須</span>
+                    </label>
+                    <input type="tel" id="form-phone" required placeholder="例：090-1234-5678" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:border-court focus:outline-none">
+                </div>
+
+                <!-- 破損箇所数 & ラケット機種名 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="form-cracks" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                            3. 破損箇所数 <span class="bg-kuma-accent text-white text-[10px] px-2 py-0.5 rounded ml-1">必須</span>
+                        </label>
+                        <select id="form-cracks" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-bold text-kuma-dark focus:border-court focus:outline-none">
+                            <option value="1か所">1か所（2,500円）</option>
+                            <option value="2か所">2か所（3,500円）</option>
+                            <option value="3か所">3か所（4,500円）</option>
+                            <option value="4か所">4か所（5,500円）</option>
+                            <option value="5か所">5か所（6,500円）</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="form-model" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                            ラケットの機種名（任意）
+                        </label>
+                        <input type="text" id="form-model" placeholder="例：アストロクス100ZZ" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:border-court focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- ご希望メニュー & ポンド数 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="form-menu" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                            4. ご希望メニュー <span class="bg-kuma-accent text-white text-[10px] px-2 py-0.5 rounded ml-1">必須</span>
+                        </label>
+                        <select id="form-menu" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-bold text-kuma-dark focus:border-court focus:outline-none">
+                            <option value="修理＋ガット張り上げ">修理＋ガット張り上げ（+1,500円）</option>
+                            <option value="修理のみ">修理のみ</option>
+                        </select>
+                    </div>
+                    <div id="form-tension-wrapper">
+                        <label for="form-tension" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                            希望ポンド数（ガット：エクスボルト65・白）
+                        </label>
+                        <input type="text" id="form-tension" placeholder="例：24ポンド" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:border-court focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- 希望お渡し場所 -->
+                <div>
+                    <label for="form-place" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                        5. ご希望のお渡し場所
+                    </label>
+                    <select id="form-place" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-bold text-kuma-dark focus:border-court focus:outline-none">
+                        <option value="① 京王線「南大沢」駅 改札外 切符売り場前（0円）">① 京王線「南大沢」駅 改札外 切符売り場前（0円）</option>
+                        <option value="② 八王子市南大沢周辺の指定場所（0円）">② 八王子市南大沢周辺の指定場所（0円）</option>
+                        <option value="③ サークル練習会場への配達（1回800円）">③ サークル練習会場への配達（1回800円）</option>
+                    </select>
+                </div>
+
+                <!-- 備考・破損状況 -->
+                <div>
+                    <label for="form-note" class="block text-sm font-bold text-kuma-dark mb-1.5">
+                        破損場所の目安・ご希望日時など（任意）
+                    </label>
+                    <textarea id="form-note" rows="3" placeholder="例：フレームの2時方向にヒビがあります。平日の19時以降に南大沢駅で受け渡し希望です。" class="w-full p-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:border-court focus:outline-none"></textarea>
+                </div>
+
+                <!-- 規約同意チェック -->
+                <div class="bg-white p-4 rounded-xl border-2 border-kuma-brown/20">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="form-agree" required class="w-5 h-5 mt-0.5 rounded text-court focus:ring-court accent-court">
+                        <span class="text-xs sm:text-sm font-bold text-kuma-dark">
+                            上記の<a href="#notes" class="text-court underline">「お読みください（ご利用規約・免責事項）」</a>および修理による重量・バランス変化に同意します。
+                        </span>
+                    </label>
+                </div>
+
+                <!-- アクションボタン群 -->
+                <div class="pt-2 space-y-3">
+                    <button type="submit" class="w-full bg-kuma-accent hover:bg-red-700 text-white font-rounded font-extrabold text-base sm:text-lg py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>メールアプリを起動して送信する</span>
+                    </button>
+
+                    <button type="button" id="copy-mail-btn" class="w-full bg-white hover:bg-kuma-beige text-kuma-dark border-2 border-kuma-brown/30 font-rounded font-bold text-sm py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 text-kuma-brown" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        <span>送信用の文面だけコピーする（Webメール・LINE等用）</span>
+                    </button>
+                </div>
+
+                <!-- 直接連絡先案内 -->
+                <div class="text-center pt-4 border-t border-kuma-beige text-xs sm:text-sm text-gray-600 space-y-1">
+                    <p>直接メールを送る場合：<strong class="text-kuma-dark select-all">badive2001@yahoo.co.jp</strong></p>
+                    <p>お電話でのお問い合わせ：<a href="tel:09097870014" class="font-bold text-court underline">090-9787-0014</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- 10. フッター -->
+    <footer class="bg-kuma-dark text-kuma-beige py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10">
+                <div class="text-center md:text-left">
+                    <div class="font-rounded font-extrabold text-xl text-white mb-1">ラケくま工房</div>
+                    <p class="text-xs text-kuma-beige/80">バドミントンラケット修理専門店｜拠点：東京都八王子市南大沢</p>
+                </div>
+                <div class="text-center md:text-right text-xs sm:text-sm space-y-1">
+                    <div>メール：<a href="mailto:badive2001@yahoo.co.jp" class="underline hover:text-white">badive2001@yahoo.co.jp</a></div>
+                    <div>携帯：<a href="tel:09097870014" class="underline hover:text-white">090-9787-0014</a></div>
+                </div>
+            </div>
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-kuma-beige/60 gap-2">
+                <p>&copy; 2026 ラケくま工房 All Rights Reserved.</p>
+                <p>※当工房の修理は各メーカー公式の保証対象外となります。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript：インタラクティブ機能制御 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. トースト通知関数（alertの代替）
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            let toastTimer = null;
+
+            function showToast(message) {
+                toastMsg.textContent = message;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                if (toastTimer) clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3500);
+            }
+
+            // 2. モバイルハンバーガーメニュー制御
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // 3. 料金シミュレーターロジック
+            let simState = {
+                cracks: 1,
+                gut: true,
+                delivery: 0
+            };
+
+            const crackBtns = document.querySelectorAll('.sim-crack-btn');
+            const gutYesBtn = document.getElementById('sim-gut-yes');
+            const gutNoBtn = document.getElementById('sim-gut-no');
+            const deliverySelect = document.getElementById('sim-delivery');
+
+            const totalPriceEl = document.getElementById('sim-total-price');
+            const breakdownCracksEl = document.getElementById('sim-breakdown-cracks');
+            const repairCostEl = document.getElementById('sim-repair-cost');
+            const gutCostEl = document.getElementById('sim-gut-cost');
+            const deliveryCostEl = document.getElementById('sim-delivery-cost');
+            const weightMinEl = document.getElementById('sim-weight-min');
+            const weightMaxEl = document.getElementById('sim-weight-max');
+
+            function updateSimulator() {
+                // 1か所目3,500円、追加1か所につき1,000円
+                const repairCost = 3500 + (simState.cracks - 1) * 1000;
+                const gutCost = simState.gut ? 2000 : 0;
+                const deliveryCost = parseInt(simState.delivery, 10);
+                const total = repairCost + gutCost + deliveryCost;
+
+                // 重量増加目安（1か所あたり2.5g〜3.0g）
+                const weightMin = (simState.cracks * 2.5).toFixed(1);
+                const weightMax = (simState.cracks * 3.0).toFixed(1);
+
+                totalPriceEl.textContent = total.toLocaleString();
+                breakdownCracksEl.textContent = simState.cracks;
+                repairCostEl.textContent = repairCost.toLocaleString();
+                gutCostEl.textContent = gutCost.toLocaleString();
+                deliveryCostEl.textContent = deliveryCost.toLocaleString();
+                weightMinEl.textContent = weightMin;
+                weightMaxEl.textContent = weightMax;
+            }
+
+            // 箇所数ボタン切り替え
+            crackBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    simState.cracks = parseInt(btn.dataset.val, 10);
+                    crackBtns.forEach(b => {
+                        b.classList.remove('border-court', 'bg-court', 'text-white');
+                        b.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                    });
+                    btn.classList.remove('border-gray-200', 'bg-white', 'text-gray-700');
+                    btn.classList.add('border-court', 'bg-court', 'text-white');
+                    updateSimulator();
+                });
+            });
+
+            // ガット有無ボタン切り替え
+            gutYesBtn.addEventListener('click', () => {
+                simState.gut = true;
+                gutYesBtn.classList.add('border-court', 'bg-court', 'text-white');
+                gutYesBtn.classList.remove('border-gray-200', 'bg-white', 'text-gray-700');
+                gutNoBtn.classList.remove('border-court', 'bg-court', 'text-white');
+                gutNoBtn.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                updateSimulator();
+            });
+
+            gutNoBtn.addEventListener('click', () => {
+                simState.gut = false;
+                gutNoBtn.classList.add('border-court', 'bg-court', 'text-white');
+                gutNoBtn.classList.remove('border-gray-200', 'bg-white', 'text-gray-700');
+                gutYesBtn.classList.remove('border-court', 'bg-court', 'text-white');
+                gutYesBtn.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                updateSimulator();
+            });
+
+            // 配達選択
+            deliverySelect.addEventListener('change', (e) => {
+                simState.delivery = e.target.value;
+                updateSimulator();
+            });
+
+            // シミュレーターから申し込みフォームへ反映
+            const applyFromSimBtn = document.getElementById('apply-from-sim');
+            applyFromSimBtn.addEventListener('click', () => {
+                const formCracks = document.getElementById('form-cracks');
+                const formMenu = document.getElementById('form-menu');
+                const formPlace = document.getElementById('form-place');
+
+                formCracks.value = `${simState.cracks}か所`;
+                formMenu.value = simState.gut ? '修理＋ガット張り上げ' : '修理のみ';
+                toggleTensionField();
+
+                if (parseInt(simState.delivery, 10) > 0) {
+                    formPlace.selectedIndex = 2; // ③ サークル練習会場
+                } else {
+                    formPlace.selectedIndex = 0; // ① 南大沢駅
+                }
+
+                document.getElementById('apply').scrollIntoView({ behavior: 'smooth' });
+                showToast('シミュレーション内容をフォームに反映しました！');
+            });
+
+            // 4. 申し込みフォーム連動＆メール生成ロジック
+            const formMenu = document.getElementById('form-menu');
+            const tensionWrapper = document.getElementById('form-tension-wrapper');
+
+            function toggleTensionField() {
+                if (formMenu.value === '修理のみ') {
+                    tensionWrapper.classList.add('opacity-40', 'pointer-events-none');
+                } else {
+                    tensionWrapper.classList.remove('opacity-40', 'pointer-events-none');
+                }
+            }
+            formMenu.addEventListener('change', toggleTensionField);
+
+            function buildMailBody() {
+                const name = document.getElementById('form-name').value.trim() || '（未入力）';
+                const phone = document.getElementById('form-phone').value.trim() || '（未入力）';
+                const cracks = document.getElementById('form-cracks').value;
+                const model = document.getElementById('form-model').value.trim() || '未記入';
+                const menu = document.getElementById('form-menu').value;
+                const tension = document.getElementById('form-tension').value.trim();
+                const place = document.getElementById('form-place').value;
+                const note = document.getElementById('form-note').value.trim() || '特になし';
+
+                const menuDetail = (menu === '修理＋ガット張り上げ')
+                    ? `${menu}（希望：${tension || 'おまかせ'} / エクスボルト65・白）`
+                    : menu;
+
+                return [
+                    'ラケくま工房 様',
+                    '',
+                    'バドミントンラケットの修理を申し込みます。',
+                    '（「お読みください」の注意事項・規約に同意のうえ申し込みます）',
+                    '',
+                    '----------------------------------------',
+                    `1. お名前：${name}`,
+                    `2. 連絡先（携帯）：${phone}`,
+                    `3. 破損箇所数：${cracks}`,
+                    `   ラケット機種名：${model}`,
+                    `4. ご希望内容：${menuDetail}`,
+                    `5. 希望お渡し場所：${place}`,
+                    `【備考・破損状況など】`,
+                    note,
+                    '----------------------------------------',
+                    '',
+                    '※破損箇所の写真がある場合は、このメールに添付して送信します。'
+                ].join('\n');
+            }
+
+            // フォーム送信（mailto起動）
+            const applyForm = document.getElementById('apply-form');
+            applyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const agree = document.getElementById('form-agree').checked;
+                if (!agree) {
+                    showToast('「お読みください」への同意にチェックを入れてください');
+                    return;
+                }
+
+                const name = document.getElementById('form-name').value.trim();
+                const subject = encodeURIComponent(`【ラケット修理申し込み】${name}様`);
+                const body = encodeURIComponent(buildMailBody());
+
+                window.location.href = `mailto:badive2001@yahoo.co.jp?subject=${subject}&body=${body}`;
+                showToast('メールアプリを起動しています...');
+            });
+
+            // 文面コピーボタン（execCommand使用）
+            const copyMailBtn = document.getElementById('copy-mail-btn');
+            copyMailBtn.addEventListener('click', () => {
+                const textToCopy = `宛先：badive2001@yahoo.co.jp\n件名：【ラケット修理申し込み】\n\n${buildMailBody()}`;
+                const tempTextarea = document.createElement('textarea');
+                tempTextarea.value = textToCopy;
+                tempTextarea.style.position = 'fixed';
+                tempTextarea.style.left = '-9999px';
+                document.body.appendChild(tempTextarea);
+                tempTextarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('申し込み文面をコピーしました！メール等に貼り付けてお送りください');
+                } catch (err) {
+                    showToast('コピーに失敗しました。手動で選択してコピーしてください');
+                }
+                document.body.removeChild(tempTextarea);
+            });
+        });
+    </script>
 </body>
-</html>
-  <p>
+<p>
   閲覧数:
   <img src="https://visitor-badge.laobi.icu/badge?page_id=badive2001.cuddly-rotary-phone" alt="閲覧数">
 </p>
